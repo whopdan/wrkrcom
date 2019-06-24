@@ -61,6 +61,7 @@ func (dmn Domain) HndlrStatus(c *gin.Context) {
 
 	rMap["msg"] = "response from the Faktory client"
 	rMap["content"] = tMap
+	c.JSON(http.StatusOK, rMap)
 }
 
 // GenerateHandlrStatus return a gin handler
@@ -89,6 +90,7 @@ func (dmn Domain) GenerateHandlrStatus() gin.HandlerFunc {
 
 		rMap["msg"] = "response from the Faktory client"
 		rMap["content"] = tMap
+		c.JSON(http.StatusOK, rMap)
 	}
 }
 
