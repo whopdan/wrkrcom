@@ -12,17 +12,18 @@ import (
 	"github.com/globalsign/mgo"
 )
 
-const (
+var (
+	// CntStopAllWorkers directive to halt worker jobs from continuing
+	CntStopAllWorkers = "STOP_WORKERS"
 	// CntWorkerNameSendSMSMessages sms msg job name
 	CntWorkerNameSendSMSMessages = "bv-job-worker-smsmsgs"
 	// CntWorkerNameQRCodeGen qrcode generation job name
 	CntWorkerNameQRCodeGen = "bv-job-worker-qrcode-gen"
 	// CntWorkerNameSMSSnaps sms snapshot job name
 	CntWorkerNameSMSSnaps = "bv-job-worker-smssnaps"
+	// ErrClientNotSet indicates that a Faktory client has not been set
+	ErrClientNotSet = errors.New("Faktory client not set")
 )
-
-// ErrClientNotSet indicates that a Faktory client has not been set
-var ErrClientNotSet = errors.New("Faktory client not set")
 
 // Domain houses data provided to a handler
 type Domain struct {
