@@ -8,6 +8,7 @@ import (
 
 	faktory "github.com/contribsys/faktory/client"
 	worker "github.com/contribsys/faktory_worker_go"
+	"github.com/danoand/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo"
 )
@@ -23,6 +24,10 @@ var (
 	CntWorkerNameSMSSnaps = "bv-job-worker-smssnaps"
 	// ErrClientNotSet indicates that a Faktory client has not been set
 	ErrClientNotSet = errors.New("Faktory client not set")
+
+	cntWorkerSMSMsgURL   = "https://bv-job-worker-dev-smsmsgs.herokuapp.com"
+	cntWorkerQRCodeURL   = "https://bv-job-worker-dev-qrcode-gen.herokuapp.com"
+	cntWorkerSMSSnapsURL = "https://bv-job-worker-dev-smssnaps.herokuapp.com"
 )
 
 // Domain houses data provided to a handler
@@ -108,4 +113,30 @@ func (dmn Domain) GenerateHandlrStatus() gin.HandlerFunc {
 func (dmn Domain) DummyFunc(ctx worker.Context, args ...interface{}) error {
 	log.Println("INFO: executing DummyFunc at time:", time.Now().Format(time.RFC3339))
 	return nil
+}
+
+// WakeWorkerApps sends a 'GET' to non-production worker instances to "wake" them up (if sleeping)
+func WakeWorkerApps() {
+	var (
+		err   error
+		links = []string{
+			cntWorkerQRCodeURL,
+			cntWorkerSMSMsgURL,
+			cntWorkerSMSSnapsURL,
+		}
+	)
+
+	// Iterate through the pertinent URLs
+	for _, ul := range links {
+		// Execute a 'GET'
+		_, err = http.Get(ul)
+		if err != nil {
+			// error fetching a URL (ping a Heroku instance)
+			log.Printf("ERROR: %v - error fetching a URL (ping a Heroku instance): %v. See: %v\n",
+				utils.FileLine(),
+				ul,
+				err)
+		}
+	}
+	return
 }
