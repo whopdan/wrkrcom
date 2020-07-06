@@ -4,10 +4,8 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"time"
 
 	faktory "github.com/contribsys/faktory/client"
-	worker "github.com/contribsys/faktory_worker_go"
 	"github.com/danoand/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo"
@@ -109,11 +107,12 @@ func (dmn Domain) GenerateHandlrStatus() gin.HandlerFunc {
 	}
 }
 
+// TODO: commented the lines below due to compilation errors... do I need this function?
 // DummyFunc executes a dummy worker function
-func (dmn Domain) DummyFunc(ctx worker.Context, args ...interface{}) error {
-	log.Println("INFO: executing DummyFunc at time:", time.Now().Format(time.RFC3339))
-	return nil
-}
+// func (dmn Domain) DummyFunc(ctx worker.Context, args ...interface{}) error {
+//	log.Println("INFO: executing DummyFunc at time:", time.Now().Format(time.RFC3339))
+//	return nil
+//}
 
 // WakeWorkerApps sends a 'GET' to non-production worker instances to "wake" them up (if sleeping)
 func WakeWorkerApps() {
